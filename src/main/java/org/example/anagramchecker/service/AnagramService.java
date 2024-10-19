@@ -11,7 +11,6 @@ public class AnagramService {
     private final Map<String, Set<String>> anagramMap = new HashMap<>();
 
     public boolean areAnagrams(String s1, String s2) {
-
         if (s1 == null || s2 == null || s1.isBlank() || s2.isBlank()) {
             return false;
         }
@@ -23,23 +22,20 @@ public class AnagramService {
             return false;
         }
 
-        final Map<Character, Integer> charCountMap = new HashMap<>();
+        final Map<Character, Integer> charCountMapS1 = mapStringToCharCount(cleanedS1);
+        final Map<Character, Integer> charCountMapS2 = mapStringToCharCount(cleanedS2);
 
-        for (char c : cleanedS1.toCharArray()) {
-            charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
+        return charCountMapS1.equals(charCountMapS2);
+    }
+
+    public void storeAnagram(String s1, String s2) {
+        if (!areAnagrams(s1, s2)) {
+            return;
         }
-
-        for (char c : cleanedS2.toCharArray()) {
-            if (!charCountMap.containsKey(c)) {
-                return false;
-            }
-            charCountMap.put(c, charCountMap.get(c) - 1);
-            if (charCountMap.get(c) == 0) {
-                charCountMap.remove(c);
-            }
-        }
-
-        return charCountMap.isEmpty();
+        String key = sortString(removeBlanksAndLowerCase(s1));
+        anagramMap.putIfAbsent(key, new HashSet<>());
+        anagramMap.get(key).add(s1);
+        anagramMap.get(key).add(s2);
     }
 
     public Set<String> findAllAnagrams(String s) {
@@ -55,15 +51,13 @@ public class AnagramService {
         return anagrams;
     }
 
-    public void storeAnagram(String s1, String s2) {
-        if (s1 == null || s2 == null || s1.isBlank() || s2.isBlank()) {
-            log.warn("Input can not be empty or null");
-            return;
+    private Map<Character, Integer> mapStringToCharCount(String cleanedS1) {
+        final Map<Character, Integer> charCountMap = new HashMap<>();
+
+        for (char c : cleanedS1.toCharArray()) {
+            charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
         }
-        String key = sortString(removeBlanksAndLowerCase(s1));
-        anagramMap.putIfAbsent(key, new HashSet<>());
-        anagramMap.get(key).add(s1);
-        anagramMap.get(key).add(s2);
+        return charCountMap;
     }
 
     private String removeBlanksAndLowerCase(String s) {

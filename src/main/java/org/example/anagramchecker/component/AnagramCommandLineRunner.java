@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.Scanner;
 import java.util.Set;
 
-@Component
 @Slf4j
+@Component
 public class AnagramCommandLineRunner implements CommandLineRunner {
     private final AnagramService anagramService;
 
@@ -36,7 +36,8 @@ public class AnagramCommandLineRunner implements CommandLineRunner {
                         findAllAnagrams(scanner);
                         break;
                     case "3":
-                        return;
+                        System.exit(0);
+                        break;
                     default:
                         printToUser("Invalid option. Please try again.");
                 }
@@ -64,7 +65,7 @@ public class AnagramCommandLineRunner implements CommandLineRunner {
         printToUser("Enter a string to find all anagrams:");
         String s = scanner.nextLine();
         Set<String> anagrams = anagramService.findAllAnagrams(s);
-        log.info(anagrams.toString());
+        printToUser(anagrams.toString());
 
     }
 
