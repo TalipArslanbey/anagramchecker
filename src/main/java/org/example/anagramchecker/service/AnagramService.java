@@ -30,6 +30,7 @@ public class AnagramService {
 
     public void storeAnagram(String s1, String s2) {
         if (!areAnagrams(s1, s2)) {
+            log.error("The strings {} and {} are no anagrams. Not saved!", s1, s2);
             return;
         }
         String key = sortString(removeBlanksAndLowerCase(s1));
