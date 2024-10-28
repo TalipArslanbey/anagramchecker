@@ -15,8 +15,8 @@ public class AnagramService {
             return false;
         }
 
-        String cleanedS1 = removeBlanksAndLowerCase(s1);
-        String cleanedS2 = removeBlanksAndLowerCase(s2);
+        final String cleanedS1 = removeBlanksAndLowerCase(s1);
+        final String cleanedS2 = removeBlanksAndLowerCase(s2);
 
         if (cleanedS1.length() != cleanedS2.length()) {
             return false;
@@ -33,7 +33,7 @@ public class AnagramService {
             log.error("The strings {} and {} are no anagrams. Not saved!", s1, s2);
             return;
         }
-        String key = sortString(removeBlanksAndLowerCase(s1));
+        final String key = sortString(removeBlanksAndLowerCase(s1));
         anagramMap.putIfAbsent(key, new HashSet<>());
         anagramMap.get(key).add(s1);
         anagramMap.get(key).add(s2);
@@ -43,13 +43,11 @@ public class AnagramService {
         if (s == null || s.isBlank()) {
             return new HashSet<>();
         }
-        String key = sortString(removeBlanksAndLowerCase(s));
+        final String key = sortString(removeBlanksAndLowerCase(s));
         Set<String> anagrams = anagramMap.getOrDefault(key, new HashSet<>());
-
-        anagrams = new HashSet<>(anagrams);
-        anagrams.remove(s);
-
-        return anagrams;
+        var result = new HashSet<>(anagrams);
+        result.remove(s);
+        return result;
     }
 
     private Map<Character, Integer> mapStringToCharCount(String cleanedS1) {
